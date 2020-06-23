@@ -26,7 +26,7 @@ class CommentForm extends Component {
 
     handleSubmit(values) {
         this.toggleModal();
-        this.props.addComment(this.props.dishId, values.rating, values.name, values.comment)
+        this.props.postComment(this.props.dishId, values.rating, values.name, values.comment)
     }
 
     render() {
@@ -95,7 +95,7 @@ class CommentForm extends Component {
     }
 }
 
-function RenderComments({ comments, addComment, dishId }) {
+function RenderComments({ comments, postComment, dishId }) {
     if (comments != null) {
         const comms = comments.map((cmnt) => {
             let date = new Intl.DateTimeFormat('en-US', {
@@ -115,7 +115,7 @@ function RenderComments({ comments, addComment, dishId }) {
         return (
             <>
             <div>{comms}</div>
-            <CommentForm dishId={dishId} addComment={addComment}/>
+            <CommentForm dishId={dishId} postComment={postComment}/>
             </>
         );
     }
@@ -126,7 +126,7 @@ function RenderComments({ comments, addComment, dishId }) {
     }
 }
 
-function RenderDish({dish, comments, addComment}) {
+function RenderDish({dish, comments, postComment}) {
     if (dish != null) {
         return (
             <div className="row">
@@ -143,7 +143,7 @@ function RenderDish({dish, comments, addComment}) {
                     <h4>Comments</h4>
                     <RenderComments 
                     comments={comments} 
-                    addComment={addComment}
+                    postComment={postComment}
                     dishId={dish.id}/>
                 </div>
             </div>
@@ -187,7 +187,7 @@ const DishDetail = (props) => {
                 <hr />
             </div>
             <div className="row">
-                <RenderDish dish={props.selectedDish} comments={props.comments} addComment={props.addComment}/>
+                <RenderDish dish={props.selectedDish} comments={props.comments} postComment={props.postComment}/>
             </div>
         </div>
     );
