@@ -3,7 +3,8 @@ import { Card, CardImg, CardTitle, CardBody, CardText, Breadcrumb, BreadcrumbIte
 import { Link } from 'react-router-dom'
 import {Control, LocalForm, Errors} from 'react-redux-form'
 import { Loading } from './LoadingComponent';
-import { baseURL } from '../shared/baseURL'
+import { baseURL } from '../shared/baseURL';
+import { FadeTransform, Fade, Stagger } from 'react-animation-components';
 
 const maxlength = (len) => (val) => !val || (val.length<=len)
 const minlength = (len) => (val) => !val || (val.length>=len)
@@ -97,24 +98,22 @@ class CommentForm extends Component {
 
 function RenderComments({ comments, postComment, dishId }) {
     if (comments != null) {
-        const comms = comments.map((cmnt) => {
-            let date = new Intl.DateTimeFormat('en-US', {
-                year: 'numeric',
-                month: 'short',
-                day: '2-digit'
-            }).format(new Date(Date.parse(cmnt.date)))
-
-            return (
-                <ul key={cmnt.id} className="list-unstyled">
-                    <li className="comment">{cmnt.comment}</li>
-                    <li className="author">-- {cmnt.author} , {date}</li>
-                </ul>
-            );
-        })
-
         return (
             <>
-            <div>{comms}</div>
+            <ul className="list-unstyled">
+            <Stagger in>
+            {comments.map((comment) => {
+                return (
+                    <Fade in>
+                    <li key={comment.id}>
+                    <p>{comment.comment}</p>
+                    <p>-- {comment.author} , {new Intl.DateTimeFormat('en-US', { year: 'numeric', month: 'short', day: '2-digit'}).format(new Date(Date.parse(comment.date)))}</p>
+                    </li>
+                    </Fade>
+                );
+            })}
+            </Stagger>
+            </ul>        
             <CommentForm dishId={dishId} postComment={postComment}/>
             </>
         );
@@ -131,6 +130,10 @@ function RenderDish({dish, comments, postComment}) {
         return (
             <div className="row">
                 <div className="col-xs-12 col-sm-12 col-md-5 m-1">
+                <FadeTransform in
+                transformProps={{
+                    exitTransform: 'scale(0.5) translateY(-50%)'
+                }}> 
                     <Card>
                         <CardImg width="100%" src={baseURL + dish.image} alt={dish.name} />
                         <CardBody>
@@ -138,6 +141,7 @@ function RenderDish({dish, comments, postComment}) {
                             <CardText>{dish.description}</CardText>
                         </CardBody>
                     </Card>
+                    </FadeTransform>
                 </div>
                 <div className="col-xs-12 col-sm-12 col-md-5 m-1">
                     <h4>Comments</h4>
