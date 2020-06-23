@@ -175,7 +175,7 @@ const DishDetail = (props) => {
             </div>
         );
     }
-    else if (props.dish != null){
+    else if (props.selectedDish != null){
     return (
         <div className="container">
             <Breadcrumb>
